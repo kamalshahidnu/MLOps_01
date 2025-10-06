@@ -1,2 +1,9 @@
 test_env/
 **/test_env/
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Airflow logs and artifacts (keep if you want them untracked)
+Labs/Airflow_Labs/airflow/logs/
