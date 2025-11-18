@@ -4,6 +4,10 @@ This directory contains various MLOps labs replicated and enhanced from the refe
 
 - Source: https://github.com/raminmohammadi/MLOps/tree/main/Labs
 
+## Model Development Lab
+
+1. **[Model_Development](Model_Development/)** - Comprehensive model development workflow with Heart Disease prediction using XGBoost and enhanced Streamlit dashboard
+
 ## API Labs
 
 1. **[FastAPI_Labs](API_Labs/FastAPI_Labs/)** - FastAPI implementation with ML model serving
