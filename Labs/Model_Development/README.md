@@ -16,17 +16,30 @@ This project replicates and enhances the Model Development lab from the referenc
 ```
 Model_Development/
 ├── src/
-│   ├── data_loader.py      # Heart Disease data loading and preprocessing
-│   ├── model.py            # XGBoost model implementation
-│   ├── train.py            # Training script
-│   └── predict.py          # Prediction script
-├── models/                 # Trained models, scalers, and metrics
-├── data/                   # Dataset storage
-├── assets/                 # Additional assets
-├── app.py                  # Enhanced Streamlit dashboard
-├── requirements.txt        # Python dependencies
-├── setup.sh               # Setup script
-└── README.md              # This file
+│   ├── data_loader.py           # Heart Disease data loading and preprocessing
+│   ├── data_pipeline.py         # Data pipeline integration
+│   ├── model.py                 # XGBoost model implementation
+│   ├── feature_selection.py    # Feature selection module
+│   ├── hyperparameter_tuning.py # Hyperparameter tuning (Optuna & Ray Tune)
+│   ├── model_validation.py      # Model validation module
+│   ├── bias_checking.py         # Bias checking and fairness analysis
+│   ├── model_registry.py        # Model registry (local & GCP)
+│   ├── rollback.py              # Rollback mechanism
+│   ├── distributed_training.py # Distributed training with Ray
+│   ├── knowledge_distillation.py # Knowledge distillation
+│   ├── model_optimization.py    # Quantization and pruning
+│   ├── train.py                 # Basic training script
+│   ├── train_comprehensive.py   # Comprehensive training pipeline
+│   └── predict.py               # Prediction script
+├── models/                      # Trained models, scalers, and metrics
+├── data/                        # Dataset storage
+├── assets/                      # Additional assets
+├── app.py                       # Enhanced Streamlit dashboard
+├── Dockerfile                   # Docker containerization
+├── docker-compose.yaml          # Docker Compose configuration
+├── requirements.txt             # Python dependencies
+├── setup.sh                     # Setup script
+└── README.md                    # This file
 ```
 
 ## 🚀 Quick Start
@@ -56,17 +69,34 @@ Model_Development/
 
 ### Training the Model
 
-Train the XGBoost model:
-
+**Basic Training:**
 ```bash
 python src/train.py
 ```
 
+**Comprehensive Training Pipeline:**
+```bash
+python src/train_comprehensive.py
+```
+
+The comprehensive pipeline includes:
+- Feature selection
+- Hyperparameter tuning
+- Model validation
+- Bias checking
+- Model selection after bias checking
+- Model registry
+- Rollback mechanism check
+
 This will:
 - Load and preprocess the Heart Disease dataset
-- Train an XGBoost classifier
-- Evaluate the model and display metrics
-- Save the model, scaler, feature importance, and metrics
+- Perform feature selection
+- Tune hyperparameters using Optuna
+- Train and validate the model
+- Check for bias and fairness
+- Register model in registry
+- Check for rollback if needed
+- Save all artifacts and reports
 
 ### Running the Dashboard
 
@@ -146,7 +176,73 @@ Visit: http://localhost:8501
   - `ca`: Number of major vessels
   - `thal`: Thalassemia
 
-## 🤖 Model Details
+## 🤖 Model Development Features
+
+### ✅ Implemented Features
+
+1. **Feature Selection**
+   - Multiple methods: Mutual Information, F-test, Chi-square, RFE, Model-based
+   - Automatic feature importance ranking
+   - Configurable number of features
+
+2. **Hyperparameter Tuning**
+   - Optuna-based optimization
+   - Ray Tune for distributed tuning
+   - Bayesian optimization
+   - Visualization of optimization history
+
+3. **Model Validation**
+   - Train/Validation/Test splits
+   - Overfitting detection
+   - Performance consistency checks
+   - Comprehensive validation reports
+
+4. **Bias Checking & Fairness**
+   - Data slicing by sensitive features
+   - Fairness metrics (80% rule)
+   - Group-wise performance analysis
+   - Bias visualization
+
+5. **Model Selection**
+   - Selection after bias checking
+   - Combined performance and fairness scoring
+   - Multi-criteria optimization
+
+6. **Model Registry**
+   - Version control for models
+   - Metadata tracking
+   - GCP Artifact Registry integration (optional)
+   - Model comparison
+
+7. **Rollback Mechanism**
+   - Automatic rollback if new model performs worse
+   - Configurable thresholds
+   - Rollback history tracking
+
+8. **Distributed Training**
+   - Ray-based distributed training
+   - Multi-worker support
+   - Parallel model training
+
+9. **Knowledge Distillation**
+   - Teacher-student model training
+   - Temperature scaling
+   - Support for multiple student model types
+
+10. **Model Optimization**
+    - Quantization (size reduction)
+    - Pruning (parameter reduction)
+    - Model compression techniques
+
+11. **Docker Support**
+    - Containerized application
+    - Docker Compose setup
+    - Production-ready deployment
+
+12. **Data Pipeline Integration**
+    - Load data from pipeline
+    - Data versioning support
+    - Transformation tracking
 
 ### XGBoost Classifier
 
@@ -165,6 +261,7 @@ Visit: http://localhost:8501
 - F1 Score
 - ROC AUC
 - Confusion Matrix
+- Fairness metrics
 
 ## 📈 Usage Examples
 
@@ -242,28 +339,20 @@ Modify hyperparameters in:
 streamlit run app.py
 ```
 
-### Docker (Optional)
+### Docker
 
-Create a `Dockerfile`:
-
-```dockerfile
-FROM python:3.9-slim
-
-WORKDIR /app
-COPY requirements.txt .
-RUN pip install -r requirements.txt
-
-COPY . .
-
-CMD ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0.0"]
+**Using Docker Compose (Recommended):**
+```bash
+docker-compose up --build
 ```
 
-Build and run:
-
+**Using Docker directly:**
 ```bash
 docker build -t heart-disease-app .
 docker run -p 8501:8501 heart-disease-app
 ```
+
+The Dockerfile is already included and configured for production deployment.
 
 ### Streamlit Cloud
 
