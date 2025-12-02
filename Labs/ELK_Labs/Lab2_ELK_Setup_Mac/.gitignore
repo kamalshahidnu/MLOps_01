@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+*.egg-info/
+dist/
+build/
+
+# Models and data
+models/*.pkl
+models/*.csv
+*.pkl
+*.joblib
+
+# Logs
+logs/*.log
+logs/*.pid
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Elasticsearch data (if running locally)
+elasticsearch/
+
+# Logstash
+logstash_data/
+

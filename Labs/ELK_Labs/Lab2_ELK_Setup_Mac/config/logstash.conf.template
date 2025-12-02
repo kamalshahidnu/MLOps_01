@@ -1,0 +1,89 @@
+input {
+  file {
+    path => "{{LOG_PATH}}"
+    start_position => "beginning"
+    codec => "json"
+    sincedb_path => "/dev/null"
+    type => "ml_model_logs"
+  }
+}
+
+filter {
+  # Parse JSON logs
+  json {
+    source => "message"
+  }
+  
+  # Add hostname
+  mutate {
+    add_field => { "hostname" => "%{host}" }
+  }
+  
+  # Extract timestamp if not present
+  if [timestamp] {
+    date {
+      match => [ "timestamp", "ISO8601" ]
+      target => "@timestamp"
+    }
+  }
+  
+  # Parse prediction events
+  if [event_type] == "prediction" {
+    mutate {
+      add_tag => [ "prediction" ]
+    }
+    
+    # Add prediction quality label
+    if [prediction] == 1 {
+      mutate {
+        add_field => { "prediction_label" => "Good Quality" }
+      }
+    } else {
+      mutate {
+        add_field => { "prediction_label" => "Poor Quality" }
+      }
+    }
+  }
+  
+  # Parse training events
+  if [event_type] == "training" {
+    mutate {
+      add_tag => [ "training" ]
+    }
+  }
+  
+  # Parse evaluation events
+  if [event_type] == "evaluation" {
+    mutate {
+      add_tag => [ "evaluation" ]
+    }
+  }
+  
+  # Parse error events
+  if [event_type] == "error" {
+    mutate {
+      add_tag => [ "error" ]
+    }
+  }
+  
+  # Parse system events
+  if [event_type] == "system" {
+    mutate {
+      add_tag => [ "system" ]
+    }
+  }
+}
+
+output {
+  elasticsearch {
+    hosts => ["localhost:9200"]
+    index => "ml-model-logs-%{+YYYY.MM.dd}"
+    template_name => "ml-model-logs"
+  }
+  
+  # Optional: output to stdout for debugging (comment out for production)
+  # stdout {
+  #   codec => rubydebug
+  # }
+}
+
